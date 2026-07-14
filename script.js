@@ -169,7 +169,7 @@ const musicBtn = document.getElementById("musicToggle");
 let songReady = false;
 
 song.querySelector("source").src = CONFIG.songFile;
-song.preload = "metadata";
+song.preload = "auto";
 song.load();
 
 // only reveal the button once we know the file actually exists
@@ -177,23 +177,35 @@ song.addEventListener("loadedmetadata", () => {
   songReady = true;
   musicBtn.hidden = false;
   musicBtn.classList.add("hint");         // gentle pulse to invite a tap
+  tryAutoplay();                          // start on its own if the browser allows
 });
 song.addEventListener("error", () => { musicBtn.hidden = true; });
 
 function playSong() {
-  if (!songReady) return;
-  song.play().then(() => {
+  if (!songReady) return Promise.reject();
+  return song.play().then(() => {
     musicBtn.classList.add("playing");
     musicBtn.classList.remove("hint");
     musicBtn.setAttribute("aria-label", "Pause music");
-  }).catch(() => {/* browser blocked it — the toggle still works */});
+  });
 }
 function pauseSong() {
   song.pause();
   musicBtn.classList.remove("playing");
   musicBtn.setAttribute("aria-label", "Play music");
 }
-musicBtn.addEventListener("click", () => (song.paused ? playSong() : pauseSong()));
+musicBtn.addEventListener("click", () => (song.paused ? playSong().catch(() => {}) : pauseSong()));
 
-// starting the invitation is a user gesture, so music is allowed to begin here
-openBtn.addEventListener("click", () => setTimeout(playSong, 300));
+// Try to auto-start. Most browsers block audio auto-play until the visitor
+// interacts, so if the first attempt is blocked we start on the very first
+// tap / scroll / key press anywhere on the page.
+function tryAutoplay() {
+  playSong().catch(() => {
+    const kick = () => { playSong().then(removeKicks).catch(() => {}); };
+    const removeKicks = () =>
+      ["pointerdown", "touchstart", "keydown", "scroll"].forEach((e) =>
+        removeEventListener(e, kick));
+    ["pointerdown", "touchstart", "keydown", "scroll"].forEach((e) =>
+      addEventListener(e, kick, { passive: true }));
+  });
+}
