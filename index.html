@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mohamed &amp; Haidy — 06.08.2026</title>
+  <meta name="description" content="The wedding of Mohamed & Haidy. Thursday, 6 August 2026, Police Mosque, Cairo. A cinematic invitation." />
+  <meta property="og:title" content="Mohamed & Haidy — 06.08.2026" />
+  <meta property="og:description" content="The wedding of Mohamed & Haidy. Thursday, 6 August 2026, Police Mosque, Cairo." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- mark that JS is available, so scroll animations enhance rather than hide -->
+  <script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <span class="monogram gold-text">M &nbsp;&amp;&nbsp; H</span>
+    <button aria-label="Back to top" onclick="scrollTo({top:0,behavior:'smooth'})">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ HERO / ELEVATOR ============ -->
+  <section class="hero">
+    <img class="olive left"  src="assets/olive-branch.png" alt="" aria-hidden="true" />
+    <img class="olive right" src="assets/olive-branch.png" alt="" aria-hidden="true" />
+
+    <div class="hero-names">
+      <p class="eyebrow" style="margin-bottom:1.5rem">We are getting married</p>
+      <h1><span class="gold-text">MOHAMED</span><span class="amp">&amp;</span><span class="gold-text">HAIDY</span></h1>
+    </div>
+
+    <!-- The moving elevator -->
+    <div class="elevator-wrap">
+      <div class="floor-indicator" id="indicator">
+        <span class="arrow">&#9650;</span>
+        <span class="floor-num" id="floorNum">L</span>
+      </div>
+      <div class="elevator" id="elevator">
+        <div class="shaft">
+          <div class="cabin-photo">
+            <div class="frame">
+              <img src="assets/photo-strip.jpeg" alt="Mohamed and Haidy" />
+            </div>
+          </div>
+          <div class="door left"></div>
+          <div class="door right"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-open" id="openBtn">Open Invitation</button>
+
+    <!-- A glimpse inside (auto-cycling film strip) -->
+    <div class="glimpse">
+      <p class="eyebrow">A Glimpse Inside</p>
+      <div class="film" id="film">
+        <img src="assets/save-the-date.jpeg"  class="active" alt="" />
+        <img src="assets/story-photo.jpeg"     alt="" />
+        <img src="assets/gallery-2.jpeg"       alt="" />
+        <img src="assets/gallery-1.jpeg"       alt="" />
+        <img src="assets/gallery-5.jpeg"       alt="" />
+        <img src="assets/couple-page2-2.jpeg"  alt="" />
+        <div class="bar top"></div>
+        <div class="bar bottom"></div>
+        <div class="vignette"></div>
+        <div class="dots" id="dots"></div>
+        <div class="caption">Save the Date</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INVITATION (revealed on open) ============ -->
+  <div class="invite" id="invite">
+
+    <!-- Save the date / invite -->
+    <section class="section">
+      <div class="paper-card invite-card reveal">
+        <p class="lead">We warmly invite you to our wedding</p>
+        <p class="the">the</p>
+        <p class="couple gold-text">Mohamed &amp; Haidy</p>
+        <div class="divider-gold" style="margin-bottom:1.25rem"></div>
+        <p class="date gold-text">AUG. 06 . 2026</p>
+        <p class="venue"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Police Mosque <span class="dot">·</span> Cairo</p>
+        <p class="sign">xx, Mohamed &amp; Haidy</p>
+        <p class="fine">Formal invitation to follow</p>
+      </div>
+    </section>
+
+    <!-- Countdown -->
+    <section class="section reveal">
+      <h2 class="gold-text">The Countdown Begins</h2>
+      <div class="divider-gold" style="margin:1rem auto"></div>
+      <div class="countdown" id="countdown">
+        <div class="paper-card unit"><div class="num" id="cd-d">--</div><div class="lbl">Days</div></div>
+        <div class="paper-card unit"><div class="num" id="cd-h">--</div><div class="lbl">Hours</div></div>
+        <div class="paper-card unit"><div class="num" id="cd-m">--</div><div class="lbl">Minutes</div></div>
+        <div class="paper-card unit"><div class="num" id="cd-s">--</div><div class="lbl">Seconds</div></div>
+      </div>
+    </section>
+
+    <!-- Our story -->
+    <section class="section reveal">
+      <h2 class="gold-text">Our Story</h2>
+      <div class="divider-gold" style="margin:1rem auto 2rem"></div>
+      <div class="story-photo"><img src="assets/story-photo.jpeg" alt="Mohamed and Haidy" /></div>
+      <p class="story-line">From one look<br />to a lifetime of love.</p>
+      <div class="heart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.9-10-9.2C.5 8.5 2 5 5.3 5c2 0 3.4 1.2 4.7 2.8C11.3 6.2 12.7 5 14.7 5 18 5 19.5 8.5 22 11.8 19.5 16.1 12 21 12 21z"/></svg>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section reveal">
+      <h2 class="gold-text">Gallery</h2>
+      <div class="divider-gold" style="margin:1rem auto 2rem"></div>
+      <div class="gallery">
+        <figure><img src="assets/save-the-date.jpeg"  alt="" /></figure>
+        <figure><img src="assets/story-photo.jpeg"    alt="" /></figure>
+        <figure><img src="assets/gallery-2.jpeg"      alt="" /></figure>
+        <figure><img src="assets/gallery-1.jpeg"      alt="" /></figure>
+        <figure><img src="assets/gallery-5.jpeg"      alt="" /></figure>
+        <figure><img src="assets/couple-page2-2.jpeg" alt="" /></figure>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="section reveal">
+      <h2 class="gold-text">RSVP</h2>
+      <div class="divider-gold" style="margin:1rem auto 2rem"></div>
+      <p class="rsvp-note">We&rsquo;d love to celebrate this special day with you. Please let us know if you&rsquo;ll be joining us.</p>
+
+      <form class="paper-card rsvp-form" id="rsvpForm">
+        <div class="field">
+          <label for="name">Your Name</label>
+          <input id="name" name="name" type="text" required />
+        </div>
+        <div class="field">
+          <label for="join">Will you join us?</label>
+          <select id="join" name="join" required>
+            <option value="Yes, with joy">Yes, with joy</option>
+            <option value="Sadly no">Sadly no</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="guests">Number of guests</label>
+          <select id="guests" name="guests">
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">Message (optional)</label>
+          <textarea id="msg" name="msg" rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn-send">Send RSVP</button>
+      </form>
+      <div class="rsvp-thanks" id="rsvpThanks">Thank you — sent with love. We can&rsquo;t wait to celebrate with you.</div>
+
+      <div class="details-row">
+        <span>06.08.2026</span><span class="dot">·</span>
+        <span>Cairo</span><span class="dot">·</span>
+        <span>7:30 PM</span>
+      </div>
+    </section>
+
+    <footer>
+      <p class="sig">with love — M &amp; H</p>
+      <p class="fine">Sent with love</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
