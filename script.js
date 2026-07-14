@@ -69,6 +69,7 @@ if (!prefersReduced && CONFIG.autoOpenDelay > 0) {
 // photo scroll by), then the invitation is revealed.
 let invited = false;
 openBtn.addEventListener("click", async () => {
+  attemptPlay();                      // if music isn't already playing, start it now (this tap counts)
   if (invited) { showInvite(); return; }
   invited = true;
   openBtn.disabled = true;
