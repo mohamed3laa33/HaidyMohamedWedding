@@ -172,17 +172,20 @@ song.querySelector("source").src = CONFIG.songFile;
 song.preload = "auto";
 song.load();
 
+let wantPlay = true;   // we want music on as soon as possible; false only if paused by hand
+
 // only reveal the button once we know the file actually exists
 song.addEventListener("loadedmetadata", () => {
   songReady = true;
   musicBtn.hidden = false;
   musicBtn.classList.add("hint");         // gentle pulse to invite a tap
-  tryAutoplay();                          // start on its own if the browser allows
+  attemptPlay();                          // starts immediately if the browser allows autoplay
 });
 song.addEventListener("error", () => { musicBtn.hidden = true; });
 
 function playSong() {
   if (!songReady) return Promise.reject();
+  wantPlay = true;
   return song.play().then(() => {
     musicBtn.classList.add("playing");
     musicBtn.classList.remove("hint");
@@ -190,22 +193,18 @@ function playSong() {
   });
 }
 function pauseSong() {
+  wantPlay = false;
   song.pause();
   musicBtn.classList.remove("playing");
   musicBtn.setAttribute("aria-label", "Play music");
 }
 musicBtn.addEventListener("click", () => (song.paused ? playSong().catch(() => {}) : pauseSong()));
 
-// Try to auto-start. Most browsers block audio auto-play until the visitor
-// interacts, so if the first attempt is blocked we start on the very first
-// tap / scroll / key press anywhere on the page.
-function tryAutoplay() {
-  playSong().catch(() => {
-    const kick = () => { playSong().then(removeKicks).catch(() => {}); };
-    const removeKicks = () =>
-      ["pointerdown", "touchstart", "keydown", "scroll"].forEach((e) =>
-        removeEventListener(e, kick));
-    ["pointerdown", "touchstart", "keydown", "scroll"].forEach((e) =>
-      addEventListener(e, kick, { passive: true }));
-  });
+// Start music at the earliest possible moment. Browsers block audio-with-sound
+// until the visitor interacts, so we arm EVERY early gesture (anywhere on the
+// page) from the very start — the first tap/scroll opens the site *and* the song.
+function attemptPlay() {
+  if (songReady && wantPlay && song.paused) playSong().catch(() => {});
 }
+["pointerdown", "touchstart", "keydown", "scroll", "click"].forEach((e) =>
+  addEventListener(e, attemptPlay, { passive: true }));
