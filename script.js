@@ -16,6 +16,11 @@ const CONFIG = {
   // Doors slide open by themselves this many ms after load.
   // Set to 0 to keep them closed until "Open Invitation" is pressed.
   autoOpenDelay: 1300,
+
+  // After the invitation opens, wait this long then gently auto-scroll down.
+  // Cancels instantly if the guest scrolls/taps. Set autoScrollDelay to 0 to disable.
+  autoScrollDelay: 5000,   // ms to wait before auto-scroll begins
+  autoScrollSpeed: 95,     // pixels per second (gentle)
 };
 
 /* ---------- 1. THE MOVING ELEVATOR ---------- */
@@ -86,7 +91,39 @@ function showInvite() {
       setTimeout(() => el.classList.add("in"), 120 * i);
     });
     invite.scrollIntoView({ behavior: "smooth" });
+    scheduleAutoScroll();
   });
+}
+
+// After opening, wait a few seconds then gently auto-scroll the guest down the
+// page — hands-free. The moment they scroll or tap to take over, we cancel it.
+function scheduleAutoScroll() {
+  if (prefersReduced || !CONFIG.autoScrollDelay) return;
+  let cancelled = false, rafId = 0, timer = 0, last = null, pos = 0;
+  const events = ["wheel", "touchmove", "keydown", "pointerdown"];
+  function stop() {
+    cancelled = true;
+    clearTimeout(timer);
+    cancelAnimationFrame(rafId);
+    events.forEach((e) => removeEventListener(e, stop));
+  }
+  events.forEach((e) => addEventListener(e, stop, { passive: true }));
+
+  timer = setTimeout(() => {
+    if (cancelled) return;
+    pos = window.scrollY;
+    const step = (ts) => {
+      if (cancelled) return;
+      if (last === null) last = ts;
+      pos += (CONFIG.autoScrollSpeed * (ts - last)) / 1000;
+      last = ts;
+      window.scrollTo(0, pos);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (pos >= max - 1) { stop(); return; }   // reached the bottom
+      rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+  }, CONFIG.autoScrollDelay);
 }
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -184,9 +221,11 @@ song.addEventListener("loadedmetadata", () => {
 song.addEventListener("error", () => { musicBtn.hidden = true; });
 
 function playSong() {
-  if (!songReady) return Promise.reject();
   wantPlay = true;
+  // call play() directly inside the gesture; the browser buffers and starts even
+  // if metadata hasn't fully loaded yet. (Gating on readyState lost early taps.)
   return song.play().then(() => {
+    musicBtn.hidden = false;
     musicBtn.classList.add("playing");
     musicBtn.classList.remove("hint");
     musicBtn.setAttribute("aria-label", "Pause music");
@@ -204,7 +243,7 @@ musicBtn.addEventListener("click", () => (song.paused ? playSong().catch(() => {
 // until the visitor interacts, so we arm EVERY early gesture (anywhere on the
 // page) from the very start — the first tap/scroll opens the site *and* the song.
 function attemptPlay() {
-  if (songReady && wantPlay && song.paused) playSong().catch(() => {});
+  if (wantPlay && song.paused) playSong().catch(() => {});
 }
 ["pointerdown", "touchstart", "keydown", "scroll", "click"].forEach((e) =>
   addEventListener(e, attemptPlay, { passive: true }));
