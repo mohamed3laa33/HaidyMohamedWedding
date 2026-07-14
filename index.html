@@ -46,7 +46,7 @@
         <div class="shaft">
           <div class="cabin-photo">
             <div class="frame">
-              <img src="assets/photo-strip.jpeg" alt="Mohamed and Haidy" />
+              <div class="strip"><img src="assets/photo-strip.jpeg" alt="Mohamed and Haidy" /></div>
             </div>
           </div>
           <div class="door left"></div>
@@ -79,17 +79,55 @@
   <!-- ============ INVITATION (revealed on open) ============ -->
   <div class="invite" id="invite">
 
-    <!-- Save the date / invite -->
-    <section class="section">
-      <div class="paper-card invite-card reveal">
-        <p class="lead">We warmly invite you to our wedding</p>
-        <p class="the">the</p>
-        <p class="couple gold-text">Mohamed &amp; Haidy</p>
-        <div class="divider-gold" style="margin-bottom:1.25rem"></div>
-        <p class="date gold-text">AUG. 06 . 2026</p>
-        <p class="venue"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Police Mosque <span class="dot">·</span> Cairo</p>
-        <p class="sign">xx, Mohamed &amp; Haidy</p>
-        <p class="fine">Formal invitation to follow</p>
+    <!-- Save the date / invite (layered polaroid + card composition) -->
+    <section class="section invite-section">
+      <div class="invite-scene reveal">
+
+        <!-- polaroid "Save the Date" photo -->
+        <div class="polaroid">
+          <div class="pic">
+            <img src="assets/save-the-date.jpeg" alt="Mohamed and Haidy" />
+            <div class="pic-shade"></div>
+            <div class="pic-text">
+              <p class="pt-eyebrow">We warmly invite you to our wedding</p>
+              <h2 class="pt-title">SAVE <span class="the">the</span> DATE</h2>
+              <div class="pt-rule"></div>
+              <p class="pt-names">Mohamed &amp; Haidy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- cream details card -->
+        <div class="paper-card details-card">
+          <p class="dc-date">AUG. 06 . 2026</p>
+          <p class="dc-venue">Police Mosque &middot; Cairo</p>
+          <p class="dc-time">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            7:30 PM
+          </p>
+          <div class="dc-block">
+            <div class="hair"></div>
+            <p class="dc-quote">We&rsquo;d love to celebrate<br />this special day with you.</p>
+            <div class="hair"></div>
+          </div>
+          <p class="dc-sign">xx, Mohamed &amp; Haidy</p>
+          <p class="dc-fine">Formal invitation to follow</p>
+        </div>
+
+        <!-- photobooth strip tucked on the side -->
+        <div class="strip-tuck">
+          <div class="frame"><img src="assets/photo-strip.jpeg" alt="Mohamed and Haidy photo strip" /></div>
+        </div>
+
+        <!-- hanging hearts -->
+        <div class="hearts" aria-hidden="true">
+          <div class="string"></div>
+          <div class="pair">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="1"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="1" style="margin-top:6px"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+        </div>
+
       </div>
     </section>
 

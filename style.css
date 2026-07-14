@@ -70,7 +70,7 @@ header button:hover{background:oklch(72% .09 75/.1)}
    HERO / ELEVATOR
    ============================================================= */
 .hero{
-  position:relative;min-height:100vh;
+  position:relative;min-height:100vh;overflow:hidden; /* keep the olive branches from causing sideways scroll */
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:6rem 1.5rem 4rem;text-align:center;
 }
@@ -86,9 +86,9 @@ header button:hover{background:oklch(72% .09 75/.1)}
 
 .hero-names{opacity:0;transform:translateY(20px);animation:rise .9s ease .2s forwards}
 .hero-names h1{
-  font-family:var(--serif);font-size:clamp(1.55rem,7vw,2.6rem);line-height:1;letter-spacing:-.01em;white-space:nowrap;
+  font-family:var(--serif);font-size:clamp(1.45rem,6.2vw,2.4rem);line-height:1;letter-spacing:-.01em;white-space:nowrap;
 }
-.hero-names h1 .amp{margin:0 .6rem;font-style:italic;font-weight:300;color:var(--gold-deep);font-size:1.9rem;vertical-align:middle}
+.hero-names h1 .amp{margin:0 .3em;font-style:italic;font-weight:300;color:var(--gold-deep);font-size:.72em;vertical-align:middle}
 @keyframes rise{to{opacity:1;transform:none}}
 
 /* ---- the elevator ---- */
@@ -129,8 +129,18 @@ header button:hover{background:oklch(72% .09 75/.1)}
   position:absolute;inset:1rem;background:#fff;padding:6px;
   box-shadow:0 10px 30px oklch(0 0 0/.5);
 }
-.cabin-photo .frame{height:100%;overflow:hidden;background:#000}
-.cabin-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+.cabin-photo .frame{position:relative;height:100%;overflow:hidden;background:#000}
+/* the tall photo strip scrolls vertically inside the car */
+.cabin-photo .strip{
+  position:absolute;top:0;left:0;right:0;transform:translateY(-20%);will-change:transform;
+  animation:strip-drift 16s ease-in-out infinite;   /* always gently moving */
+}
+.cabin-photo .strip img{width:100%;height:auto;display:block;filter:grayscale(1)}
+/* while the elevator travels, the strip scrolls faster (car in motion) */
+.elevator.travelling .strip{animation:strip-scroll 1s linear infinite}
+.elevator.travelling .cabin-photo img{filter:grayscale(1) blur(.6px)}
+@keyframes strip-drift{0%,100%{transform:translateY(-10%)}50%{transform:translateY(-32%)}}
+@keyframes strip-scroll{0%{transform:translateY(-2%)}100%{transform:translateY(-40%)}}
 
 /* the two brass doors */
 .door{
@@ -206,16 +216,42 @@ header button:hover{background:oklch(72% .09 75/.1)}
 .section h2{font-family:var(--serif);font-size:1.9rem;margin-bottom:.5rem}
 .section .sub{font-family:var(--script);font-style:italic;font-size:1.15rem;color:oklch(50% .02 60);margin-bottom:2rem}
 
-/* invite card */
-.invite-card{padding:3rem 1.75rem}
-.invite-card .lead{font-family:var(--script);font-style:italic;font-size:1.25rem;color:var(--gold-deep)}
-.invite-card .the{font-family:var(--script);font-style:italic;font-size:1rem;color:oklch(50% .02 60);margin:.4rem 0}
-.invite-card .couple{font-family:var(--serif);font-size:2.4rem;line-height:1.1;margin:.3rem 0 1.25rem}
-.invite-card .date{font-family:var(--serif);font-size:1.4rem;letter-spacing:.15em}
-.invite-card .venue{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.6rem;color:var(--gold-deep);font-size:.95rem}
-.invite-card .venue .dot{color:oklch(72% .09 75/.5)}
-.invite-card .sign{font-family:var(--script);font-style:italic;font-size:1.2rem;margin-top:1.75rem;color:var(--gold-deep)}
-.invite-card .fine{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:oklch(50% .02 60);margin-top:.75rem}
+/* ---- layered invitation composition ---- */
+.invite-section{overflow:hidden;padding:5.5rem 1rem}
+.invite-scene{position:relative;margin:0 auto;width:min(21rem,100%)}
+
+/* polaroid photo */
+.polaroid{position:relative;margin:0 auto;width:min(230px,68vw);background:#fff;padding:11px 11px 15px;box-shadow:var(--shadow-luxe);z-index:20;transform:translateX(-.9rem) rotate(-2deg)}
+.polaroid .pic{position:relative;aspect-ratio:4/3;overflow:hidden;background:#000}
+.polaroid .pic img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+.pic-shade{position:absolute;inset:0;background:linear-gradient(to bottom,oklch(0 0 0/.3),transparent,oklch(0 0 0/.5))}
+.pic-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 1rem;color:#fff;text-align:center}
+.pt-eyebrow{font-size:8px;letter-spacing:.35em;text-transform:uppercase;opacity:.9}
+.pt-title{font-family:var(--serif);font-size:clamp(1.3rem,6.5vw,1.75rem);line-height:1;margin-top:.75rem;font-weight:500;white-space:nowrap}
+.pt-title .the{font-family:var(--script);font-style:italic;font-size:1.1rem;vertical-align:middle;margin:0 .25rem;font-weight:400}
+.pt-rule{width:4rem;height:1px;background:oklch(1 0 0/.5);margin-top:1rem}
+.pt-names{font-size:9px;letter-spacing:.4em;text-transform:uppercase;margin-top:.75rem}
+
+/* cream details card, overlapping */
+.details-card{position:relative;margin:-2rem auto 0;width:min(230px,68vw);padding:2rem 1.35rem;z-index:10;transform:translateX(.35rem) rotate(1deg)}
+.dc-date{text-align:center;font-family:var(--serif);font-size:1.5rem;letter-spacing:.05em}
+.dc-venue{text-align:center;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:oklch(50% .02 60);margin-top:.5rem}
+.dc-time{display:flex;align-items:center;justify-content:center;gap:.4rem;margin-top:.5rem;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-deep)}
+.dc-block{margin:1.5rem 0;display:flex;flex-direction:column;gap:.75rem}
+.dc-block .hair{height:1px;background:oklch(72% .09 75/.3)}
+.dc-quote{font-family:var(--serif);font-style:italic;font-size:.98rem;text-align:center;line-height:1.45;color:var(--gold-deep)}
+.dc-sign{text-align:center;font-family:var(--script);font-style:italic;font-size:1.35rem;color:var(--gold-deep)}
+.dc-fine{text-align:center;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:oklch(50% .02 60);margin-top:1.5rem}
+
+/* photobooth strip tucked at the side */
+.strip-tuck{position:absolute;left:-.25rem;top:52%;width:64px;background:#fff;padding:5px;box-shadow:var(--shadow-luxe);z-index:30;transform:rotate(-8deg)}
+.strip-tuck .frame{overflow:hidden;background:#000}
+.strip-tuck img{width:100%;height:auto;display:block;filter:grayscale(1)}
+
+/* hanging hearts */
+.hearts{position:absolute;right:.25rem;top:22%;z-index:30;transform:rotate(8deg)}
+.hearts .string{width:1px;height:5rem;margin:0 auto;background:linear-gradient(to bottom,transparent,oklch(72% .09 75/.6),var(--gold))}
+.hearts .pair{margin-top:.25rem;display:flex;gap:4px}
 
 /* countdown */
 .countdown{display:flex;justify-content:center;gap:.75rem;margin-top:1.5rem}

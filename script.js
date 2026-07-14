@@ -61,7 +61,8 @@ if (!prefersReduced && CONFIG.autoOpenDelay > 0) {
   setTimeout(openDoors, CONFIG.autoOpenDelay);
 }
 
-// "Open Invitation": take a little ride, then reveal the invitation.
+// "Open Invitation": the car rides up (doors stay open so you watch the
+// photo scroll by), then the invitation is revealed.
 let invited = false;
 openBtn.addEventListener("click", async () => {
   if (invited) { showInvite(); return; }
@@ -69,11 +70,9 @@ openBtn.addEventListener("click", async () => {
   openBtn.disabled = true;
   openBtn.textContent = "Going up…";
 
-  closeDoors();                       // doors shut for the ride
-  await wait(prefersReduced ? 100 : 900);
-  await runFloors(1, 5);              // ride up to floor 5
-  openDoors();                        // doors open at the top
-  await wait(prefersReduced ? 100 : 900);
+  openDoors();                        // make sure we can see inside
+  await runFloors(1, 6);              // travel — the strip scrolls as we move
+  await wait(prefersReduced ? 100 : 500);
 
   showInvite();
   openBtn.textContent = "Welcome";
@@ -81,10 +80,13 @@ openBtn.addEventListener("click", async () => {
 
 function showInvite() {
   invite.classList.add("revealed");
-  // let layout settle, then scroll down into the invitation
+  // reveal every section right away (don't rely only on scroll observers),
+  // then glide down into the invitation
   requestAnimationFrame(() => {
+    document.querySelectorAll(".reveal").forEach((el, i) => {
+      setTimeout(() => el.classList.add("in"), 120 * i);
+    });
     invite.scrollIntoView({ behavior: "smooth" });
-    setTimeout(revealOnScroll, 400);
   });
 }
 
