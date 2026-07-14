@@ -203,32 +203,34 @@ updateProgress();
 /* ---------- 6. BACKGROUND MUSIC ---------- */
 const song = document.getElementById("song");
 const musicBtn = document.getElementById("musicToggle");
-let songReady = false;
+const musicHint = document.getElementById("musicHint");
+let wantPlay = true;   // we want music on as soon as possible; false only if paused by hand
 
 song.querySelector("source").src = CONFIG.songFile;
 song.preload = "auto";
 song.load();
 
-let wantPlay = true;   // we want music on as soon as possible; false only if paused by hand
+// Show the control RIGHT AWAY. (iOS Safari won't preload audio, so waiting for a
+// "loaded" event would leave the button invisible until a tap — which looked like
+// "music never loaded". Now the button is always there; if the file is genuinely
+// missing, the error handler hides it.)
+musicBtn.hidden = false;
+musicBtn.classList.add("hint");
+song.addEventListener("error", () => { musicBtn.hidden = true; hideHint(); });
+["loadedmetadata", "canplay"].forEach((e) => song.addEventListener(e, attemptPlay));
 
-// only reveal the button once we know the file actually exists
-song.addEventListener("loadedmetadata", () => {
-  songReady = true;
-  musicBtn.hidden = false;
-  musicBtn.classList.add("hint");         // gentle pulse to invite a tap
-  attemptPlay();                          // starts immediately if the browser allows autoplay
-});
-song.addEventListener("error", () => { musicBtn.hidden = true; });
+function hideHint() { if (musicHint) musicHint.classList.add("gone"); }
 
 function playSong() {
   wantPlay = true;
-  // call play() directly inside the gesture; the browser buffers and starts even
-  // if metadata hasn't fully loaded yet. (Gating on readyState lost early taps.)
+  // call play() straight inside the gesture; the browser buffers + starts even
+  // before it's fully loaded.
   return song.play().then(() => {
     musicBtn.hidden = false;
     musicBtn.classList.add("playing");
     musicBtn.classList.remove("hint");
     musicBtn.setAttribute("aria-label", "Pause music");
+    hideHint();
   });
 }
 function pauseSong() {
@@ -241,9 +243,12 @@ musicBtn.addEventListener("click", () => (song.paused ? playSong().catch(() => {
 
 // Start music at the earliest possible moment. Browsers block audio-with-sound
 // until the visitor interacts, so we arm EVERY early gesture (anywhere on the
-// page) from the very start — the first tap/scroll opens the site *and* the song.
+// page) — the first tap/scroll opens the site *and* the song.
 function attemptPlay() {
   if (wantPlay && song.paused) playSong().catch(() => {});
 }
 ["pointerdown", "touchstart", "keydown", "scroll", "click"].forEach((e) =>
   addEventListener(e, attemptPlay, { passive: true }));
+
+// tuck the hint away after a while even if nothing happens
+setTimeout(hideHint, 9000);
