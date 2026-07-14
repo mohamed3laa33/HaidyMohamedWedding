@@ -66,6 +66,29 @@ header button{
 }
 header button:hover{background:oklch(72% .09 75/.1)}
 
+/* ---- modern touches ---- */
+/* thin gold reading-progress bar */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:2px;width:0;z-index:60;
+  background:linear-gradient(90deg,var(--gold-soft),var(--gold),var(--gold-deep));
+  box-shadow:0 0 8px oklch(72% .09 75/.5);
+}
+/* faint film grain for an editorial, non-flat feel */
+.grain{
+  position:fixed;inset:0;z-index:55;pointer-events:none;opacity:.04;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* location / directions pill */
+.map-btn{
+  display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;
+  padding:.5rem 1.05rem;border-radius:999px;text-decoration:none;
+  border:1px solid var(--gold);color:var(--gold-deep);background:oklch(72% .09 75/.08);
+  font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  transition:background .2s,transform .2s;
+}
+.map-btn:hover{background:oklch(72% .09 75/.18);transform:translateY(-1px)}
+.map-btn.big{margin-top:1.5rem;padding:.7rem 1.4rem;font-size:10px;letter-spacing:.25em}
+
 /* =============================================================
    HERO / ELEVATOR
    ============================================================= */
@@ -130,17 +153,16 @@ header button:hover{background:oklch(72% .09 75/.1)}
   box-shadow:0 10px 30px oklch(0 0 0/.5);
 }
 .cabin-photo .frame{position:relative;height:100%;overflow:hidden;background:#000}
-/* the tall photo strip scrolls vertically inside the car */
+/* the tall photo strip travels the full window, top <-> bottom, like a lift */
 .cabin-photo .strip{
-  position:absolute;top:0;left:0;right:0;transform:translateY(-20%);will-change:transform;
-  animation:strip-drift 16s ease-in-out infinite;   /* always gently moving */
+  position:absolute;top:0;left:0;right:0;will-change:transform;
+  animation:strip-travel 7s ease-in-out infinite;   /* full photo sweeps top->bottom */
 }
 .cabin-photo .strip img{width:100%;height:auto;display:block;filter:grayscale(1)}
-/* while the elevator travels, the strip scrolls faster (car in motion) */
-.elevator.travelling .strip{animation:strip-scroll 1s linear infinite}
-.elevator.travelling .cabin-photo img{filter:grayscale(1) blur(.6px)}
-@keyframes strip-drift{0%,100%{transform:translateY(-10%)}50%{transform:translateY(-32%)}}
-@keyframes strip-scroll{0%{transform:translateY(-2%)}100%{transform:translateY(-40%)}}
+/* while the elevator travels, the whole photo rushes past (car in motion) */
+.elevator.travelling .strip{animation:strip-travel 2.2s ease-in-out infinite}
+.elevator.travelling .cabin-photo img{filter:grayscale(1) blur(.8px) contrast(1.05)}
+@keyframes strip-travel{0%{transform:translateY(0)}50%{transform:translateY(-32%)}100%{transform:translateY(0)}}
 
 /* the two brass doors */
 .door{

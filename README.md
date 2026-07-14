@@ -2,8 +2,17 @@
 
 A single-page, cinematic wedding invitation. Pure HTML/CSS/JS — **no build step**,
 so it runs anywhere and is easy to edit. The first screen is a **moving brass
-elevator**: the doors slide open to reveal you both, and pressing *Open Invitation*
-takes a short "ride" before the invitation appears.
+elevator**: the full photo travels top-to-bottom inside the car, the doors slide
+open to reveal you both, and pressing *Open Invitation* takes a longer "ride"
+before the invitation appears.
+
+**Live links**
+- Short: **https://tinyurl.com/HaidyMohamed**  (also `MohamedHaidy2026`, `HaidyAndMohamed`)
+- Full:  https://mohamed3laa33.github.io/HaidyMohamedWedding/
+
+**Venue map:** the *View Location* / *Get Directions* buttons open
+`https://share.google/RZT1csKHol5QqQGUR` (Police Mosque). To change it, edit those
+two `href`s in `index.html`.
 
 ## Files
 ```

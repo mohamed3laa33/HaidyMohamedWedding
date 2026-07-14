@@ -66,8 +66,8 @@ openBtn.addEventListener("click", async () => {
   openBtn.textContent = "Going up…";
 
   openDoors();                        // make sure we can see inside
-  await runFloors(1, 6);              // travel — the strip scrolls as we move
-  await wait(prefersReduced ? 100 : 500);
+  await runFloors(1, 9);              // a longer ride — the full photo sweeps past
+  await wait(prefersReduced ? 100 : 400);
 
   showInvite();
   openBtn.textContent = "Welcome";
@@ -147,3 +147,14 @@ function revealOnScroll() {
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 }
 revealOnScroll();
+
+/* ---------- 5. GOLD SCROLL-PROGRESS BAR ---------- */
+const progress = document.getElementById("scrollProgress");
+function updateProgress() {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+  progress.style.width = pct + "%";
+}
+addEventListener("scroll", updateProgress, { passive: true });
+addEventListener("resize", updateProgress);
+updateProgress();
