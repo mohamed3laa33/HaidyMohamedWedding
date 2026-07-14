@@ -19,7 +19,7 @@ const CONFIG = {
 
   // After the invitation opens, wait this long then gently auto-scroll down.
   // Cancels instantly if the guest scrolls/taps. Set autoScrollDelay to 0 to disable.
-  autoScrollDelay: 5000,   // ms to wait before auto-scroll begins
+  autoScrollDelay: 1500,   // ms to wait before auto-scroll begins (~1.5s)
   autoScrollSpeed: 95,     // pixels per second (gentle)
 };
 
