@@ -9,6 +9,10 @@ const CONFIG = {
   // Format: "YYYY-MM-DDTHH:MM:SS+02:00"  (+02:00 = Cairo time)
   weddingDateTime: "2026-08-06T19:30:00+02:00",
 
+  // Background music. Put your file at this path (an .mp3 works best).
+  // If the file isn't there, the music button simply won't appear.
+  songFile: "assets/song.mp3",
+
   // Doors slide open by themselves this many ms after load.
   // Set to 0 to keep them closed until "Open Invitation" is pressed.
   autoOpenDelay: 1300,
@@ -158,3 +162,38 @@ function updateProgress() {
 addEventListener("scroll", updateProgress, { passive: true });
 addEventListener("resize", updateProgress);
 updateProgress();
+
+/* ---------- 6. BACKGROUND MUSIC ---------- */
+const song = document.getElementById("song");
+const musicBtn = document.getElementById("musicToggle");
+let songReady = false;
+
+song.querySelector("source").src = CONFIG.songFile;
+song.preload = "metadata";
+song.load();
+
+// only reveal the button once we know the file actually exists
+song.addEventListener("loadedmetadata", () => {
+  songReady = true;
+  musicBtn.hidden = false;
+  musicBtn.classList.add("hint");         // gentle pulse to invite a tap
+});
+song.addEventListener("error", () => { musicBtn.hidden = true; });
+
+function playSong() {
+  if (!songReady) return;
+  song.play().then(() => {
+    musicBtn.classList.add("playing");
+    musicBtn.classList.remove("hint");
+    musicBtn.setAttribute("aria-label", "Pause music");
+  }).catch(() => {/* browser blocked it — the toggle still works */});
+}
+function pauseSong() {
+  song.pause();
+  musicBtn.classList.remove("playing");
+  musicBtn.setAttribute("aria-label", "Play music");
+}
+musicBtn.addEventListener("click", () => (song.paused ? playSong() : pauseSong()));
+
+// starting the invitation is a user gesture, so music is allowed to begin here
+openBtn.addEventListener("click", () => setTimeout(playSong, 300));

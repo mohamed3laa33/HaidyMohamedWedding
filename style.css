@@ -89,6 +89,31 @@ header button:hover{background:oklch(72% .09 75/.1)}
 .map-btn:hover{background:oklch(72% .09 75/.18);transform:translateY(-1px)}
 .map-btn.big{margin-top:1.5rem;padding:.7rem 1.4rem;font-size:10px;letter-spacing:.25em}
 
+/* floating music toggle */
+.music-btn{
+  position:fixed;right:16px;bottom:16px;z-index:70;
+  height:46px;width:46px;border-radius:999px;cursor:pointer;
+  display:grid;place-items:center;
+  border:1px solid var(--gold);color:var(--gold-deep);
+  background:oklch(96.5% .008 75/.85);backdrop-filter:blur(6px);
+  box-shadow:0 8px 24px -8px oklch(30% .02 60/.35);
+  transition:transform .2s,background .2s;
+}
+.music-btn:hover{transform:translateY(-2px);background:oklch(72% .09 75/.15)}
+.music-btn .note{display:grid;place-items:center}
+.music-btn .bars{display:none;gap:2px;align-items:flex-end;height:16px}
+.music-btn .bars i{width:3px;height:100%;background:currentColor;border-radius:2px;transform-origin:bottom;animation:eq 1s ease-in-out infinite}
+.music-btn .bars i:nth-child(2){animation-delay:.25s}
+.music-btn .bars i:nth-child(3){animation-delay:.5s}
+@keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+/* while playing: show the equalizer, hide the note, and softly ring */
+.music-btn.playing .note{display:none}
+.music-btn.playing .bars{display:flex}
+.music-btn.playing{box-shadow:0 0 0 4px oklch(72% .09 75/.18), 0 8px 24px -8px oklch(30% .02 60/.35)}
+/* gentle attention pulse before first play */
+.music-btn.hint{animation:mpulse 2s ease-in-out infinite}
+@keyframes mpulse{0%,100%{box-shadow:0 0 0 0 oklch(72% .09 75/.4)}50%{box-shadow:0 0 0 8px oklch(72% .09 75/0)}}
+
 /* =============================================================
    HERO / ELEVATOR
    ============================================================= */

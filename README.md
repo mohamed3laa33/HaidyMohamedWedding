@@ -57,6 +57,19 @@ Add `#peek` to the URL to jump straight into the invitation while editing.
 | Colours / fonts | the `:root` variables at the top of `style.css` |
 | Doors auto-open timing | `CONFIG.autoOpenDelay` in `script.js` |
 
+### Background music 🎵
+Put your song at **`assets/song.mp3`** (an `.mp3` works best) and push. The gold
+music button appears automatically at the bottom-right; the song starts when a
+guest taps *Open Invitation* (browsers block auto-play with sound, so that tap is
+what gives permission), and the button toggles play/pause. No file = no button,
+nothing breaks. To use a different name, change `CONFIG.songFile` in `script.js`.
+
+Quick way to add it from a terminal:
+```bash
+cp ~/Downloads/our-song.mp3 assets/song.mp3
+git add assets/song.mp3 && git commit -m "Add song" && git push
+```
+
 ### About the RSVP form
 GitHub Pages is static (no server), so submitting the RSVP opens the guest's
 email app with a pre-filled message to `CONFIG.rsvpEmail`. If you'd rather collect
