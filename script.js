@@ -9,11 +9,6 @@ const CONFIG = {
   // Format: "YYYY-MM-DDTHH:MM:SS+02:00"  (+02:00 = Cairo time)
   weddingDateTime: "2026-08-06T19:30:00+02:00",
 
-  // Where RSVP replies should go. On GitHub Pages there is no server,
-  // so submitting the form opens the guest's email app with a message
-  // pre-filled to this address. Change it to your email.
-  rsvpEmail: "mohamedabdelshakor1@gmail.com",
-
   // Doors slide open by themselves this many ms after load.
   // Set to 0 to keep them closed until "Open Invitation" is pressed.
   autoOpenDelay: 1300,
@@ -143,7 +138,8 @@ function tickCountdown() {
 tickCountdown();
 setInterval(tickCountdown, 1000);
 
-/* ---------- 4. REVEAL SECTIONS ON SCROLL ---------- */
+/* ---------- 4. REVEAL SECTIONS ON SCROLL ----------
+   (The RSVP section was intentionally removed at the couple's request.) */
 function revealOnScroll() {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); });
@@ -151,23 +147,3 @@ function revealOnScroll() {
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 }
 revealOnScroll();
-
-/* ---------- 5. RSVP (opens a pre-filled email — no server needed) ---------- */
-document.getElementById("rsvpForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const f = e.target;
-  const name   = f.name.value.trim();
-  const join   = f.join.value;
-  const guests = f.guests.value;
-  const msg    = f.msg.value.trim();
-  const subject = `Wedding RSVP — ${name || "Guest"}`;
-  const body =
-    `Name: ${name}\n` +
-    `Attending: ${join}\n` +
-    `Number of guests: ${guests}\n` +
-    `Message: ${msg || "-"}`;
-  window.location.href =
-    `mailto:${CONFIG.rsvpEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  f.style.display = "none";
-  document.getElementById("rsvpThanks").classList.add("show");
-});
